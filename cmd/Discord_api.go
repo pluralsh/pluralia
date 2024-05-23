@@ -73,10 +73,6 @@ func registerCommands() {
 
 	commands := []*discordgo.ApplicationCommand{
 		{
-			Name:        "scrape",
-			Description: "Scrape Discord channel for Upscaled Midjourney Images",
-		},
-		{
 			Name:        "pluralia-image",
 			Description: "Use DALL-E 3 to generate an Image",
 			Options: []*discordgo.ApplicationCommandOption{
@@ -100,6 +96,8 @@ func registerCommands() {
 func handleCommands(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	discordInitialResponse("pluraliaing...", s, i)
 	switch i.ApplicationCommandData().Name {
+	case "pluralia-image":
+		discordpluraliaImage(s, i)
 	default: // Handle unknown slash commands
 		log.Printf("Unknown pluralia Command: %s", i.ApplicationCommandData().Name)
 	}
