@@ -79,7 +79,6 @@ func init() {
 	rootCmd.PersistentFlags().BoolVarP(&convo, "convo", "c", false, "Conversational Style chat")
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose output")
 	rootCmd.PersistentFlags().BoolVarP(&narrate, "narrate", "n", false, "Narrate the response using TTS and the default audio output")
-	rootCmd.PersistentFlags().StringVar(&voice, "voice", "onyx", "Voice to use: alloy, echo, fable, onyx, nova, and shimmer")
 
 	// Check for Required Environment Variables
 	OPENAI_API_KEY = os.Getenv("OPENAI_API_KEY")
@@ -129,10 +128,10 @@ func viperConfig() {
 
 	viper.SetDefault("printify_endpoint", "https://api.printify.com/v1/")
 
-	viper.SetConfigName("config")        // name of config file (without extension)
-	viper.SetConfigType("yaml")          // REQUIRED the config file does not have an extension
-	viper.AddConfigPath(".")             // look for config in the working directory
-	viper.AddConfigPath("./files")       // look for config in the working directory /files
+	viper.SetConfigName("config")          // name of config file (without extension)
+	viper.SetConfigType("yaml")            // REQUIRED the config file does not have an extension
+	viper.AddConfigPath(".")               // look for config in the working directory
+	viper.AddConfigPath("./files")         // look for config in the working directory /files
 	viper.AddConfigPath("$HOME/.pluralia") // call multiple times to add many search paths
 
 	if configFile != "" {

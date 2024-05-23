@@ -22,10 +22,10 @@ var ttsCmd = &cobra.Command{
 	You can use the TTS API to generate audio from text.
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		audio := tts(prompt)
-		if audio != nil {
-			playAudio(audio)
-		}
+		// audio := tts(prompt)
+		// if audio != nil {
+		// 	playAudio(audio)
+		// }
 	},
 }
 

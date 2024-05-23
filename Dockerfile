@@ -1,5 +1,5 @@
 
-FROM golang:1.21.5-alpine3.19 AS builder
+FROM golang:1.22.3-alpine3.20 AS builder
 ENV APP_NAME pluralia
 ENV WORKDIR /app
 WORKDIR $WORKDIR
