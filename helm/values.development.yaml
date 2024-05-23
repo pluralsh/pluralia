@@ -1,0 +1,123 @@
+# Default values for pluralia development.
+# helm upgrade --install pluralia ./helm --values ./helm/values.development.yaml
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/seemywingz/pluralia
+  pullPolicy: Always
+  tag: develop
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+app:
+  name: pluralia
+  args:
+    - discord-bot
+    - --config
+    - ./config
+    - -v
+  configData:
+    openAI_endpoint: "https://api.openAI.com/v1/"
+    openAI_image_downloadPath: "~/pluralia/Images/"
+    openAI_image_size: "1024x1024"
+    openAI_image_model: "dall-e-3"
+    openAI_topP: 0.1
+    openAI_temperature: 0
+    openAI_maxTokens: 999
+    openAI_presencePenalty: 0.6
+    openAI_frequencyPenalty: 0.0
+    openAI_chat_model: "gpt-4"
+    openAI_text_model: "text-davinci-003"
+    discord_message_context_count: 15
+    discord_bot_systemMessage: |
+      You are pluralia. 
+      pluralia is here to help you with your Discord needs. 
+      Please be respectful and courteous when interacting with pluralia. 
+      pluralia will not tolerate any form of harassment, bullying, or discrimination. 
+      If you have any questions or concerns, please let us know. Thank you for using pluralia!
+  env:
+    - name: OPENAI_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: openai-api-key
+          key: api-key
+    - name: PRINTIFY_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: printify-api-key
+          key: api-key
+    - name: DISCORD_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: discord-api-key
+          key: api-key
+    - name: DISCORD_PUB_KEY
+      valueFrom:
+        secretKeyRef:
+          name: discord-pub-key
+          key: pub-key
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: "cloudlfare-letsencrypt-production"
+    nginx.ingress.kubernetes.io/auth-response-headers: Authorization
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      auth_request_set $token $upstream_http_x_auth_request_access_token;
+  more_set_headers "Request-Id: $req_id";
+  hosts:
+    - host: discipuli.ai
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: discipuli.ai-tls
+      hosts:
+        - discipuli.ai
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  {}
+  # fsGroup: 2000
+
+securityContext: {}
+
+resources:
+  {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
