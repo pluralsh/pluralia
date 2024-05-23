@@ -55,17 +55,22 @@ app:
       valueFrom:
         secretKeyRef:
           name: openai-api-key
-          key: value
+          key: api-key
     - name: DISCORD_API_KEY
       valueFrom:
         secretKeyRef:
           name: discord-api-key
-          key: value
+          key: api-key
     - name: DISCORD_PUB_KEY
       valueFrom:
         secretKeyRef:
           name: discord-pub-key
-          key: value
+          key: pub-key
+
+key:
+  openai-api-key: ""
+  discord-api-key: ""
+  discord-pub-key: ""
 
 service:
   type: ClusterIP
