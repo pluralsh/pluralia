@@ -1,12 +1,10 @@
-# Default values for pluralia development.
-# helm upgrade --install pluralia ./helm --values ./helm/values.development.yaml
 
 replicaCount: 1
 
 image:
-  repository: ghcr.io/seemywingz/pluralia
+  repository: ghcr.io/pluralsh/pluralia
   pullPolicy: Always
-  tag: develop
+  tag: latest
 
 imagePullSecrets: []
 nameOverride: ""
@@ -29,8 +27,11 @@ app:
     openAI_maxTokens: 999
     openAI_presencePenalty: 0.6
     openAI_frequencyPenalty: 0.0
-    openAI_chat_model: "gpt-4"
-    openAI_text_model: "text-davinci-003"
+    openAI_chat_model: "gpt-4o"
+    openAI_tts_model: "tts-1"
+    openAI_tts_voice: "onyx"
+    openAI_tts_speed: 1.0
+    openAI_tts_responseFormat: "mp3"
     discord_message_context_count: 15
     discord_bot_systemMessage: |
       You are pluralia. 
@@ -43,11 +44,6 @@ app:
       valueFrom:
         secretKeyRef:
           name: openai-api-key
-          key: api-key
-    - name: PRINTIFY_API_KEY
-      valueFrom:
-        secretKeyRef:
-          name: printify-api-key
           key: api-key
     - name: DISCORD_API_KEY
       valueFrom:
@@ -63,25 +59,6 @@ app:
 service:
   type: ClusterIP
   port: 8080
-
-ingress:
-  enabled: false
-  className: "nginx"
-  annotations:
-    cert-manager.io/cluster-issuer: "cloudlfare-letsencrypt-production"
-    nginx.ingress.kubernetes.io/auth-response-headers: Authorization
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      auth_request_set $token $upstream_http_x_auth_request_access_token;
-  more_set_headers "Request-Id: $req_id";
-  hosts:
-    - host: discipuli.ai
-      paths:
-        - path: /
-          pathType: Prefix
-  tls:
-    - secretName: discipuli.ai-tls
-      hosts:
-        - discipuli.ai
 
 serviceAccount:
   create: false
