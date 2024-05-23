@@ -10,6 +10,17 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+ingress:
+  enabled: false
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths: []
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
 app:
   name: pluralia
   args:
@@ -35,7 +46,7 @@ app:
     discord_message_context_count: 15
     discord_bot_systemMessage: |
       You are pluralia. 
-      pluralia is here to help you with your Discord needs. 
+      pluralia is here to help you with your Plural.sh needs. 
       Please be respectful and courteous when interacting with pluralia. 
       pluralia will not tolerate any form of harassment, bullying, or discrimination. 
       If you have any questions or concerns, please let us know. Thank you for using pluralia!
