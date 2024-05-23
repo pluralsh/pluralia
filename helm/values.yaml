@@ -68,9 +68,9 @@ app:
           key: pub-key
 
 key:
-  openai-api-key: ""
-  discord-api-key: ""
-  discord-pub-key: ""
+  openai_api_key: ""
+  discord_api_key: ""
+  discord_pub_key: ""
 
 service:
   type: ClusterIP
